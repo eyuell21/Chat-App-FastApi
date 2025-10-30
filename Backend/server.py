@@ -4,10 +4,11 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from datetime import datetime
 import json
+import os
 
 app = FastAPI()
 
-# Enable CORS for all origins 
+# Enable CORS for all origins
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -17,32 +18,25 @@ app.add_middleware(
 )
 
 
-messages = []
+# Global storage
 
-# Track connected WebSocket clients
+messages = []
 active_connections: list[WebSocket] = []
 
+# Pydantic models
 
-# -----------------------
-# Pydantic request models
-# -----------------------
 class MessageCreate(BaseModel):
     message: str
-
 
 class Reaction(BaseModel):
     timestamp: str
 
-
-# -----------------------
-# HTTP Endpoints
-# -----------------------
+# HTTP endpoints
 
 @app.get("/messages")
 async def get_messages():
     """Return all messages as JSON."""
     return JSONResponse(content=messages)
-
 
 @app.post("/messages")
 async def post_message(data: MessageCreate):
@@ -59,10 +53,8 @@ async def post_message(data: MessageCreate):
     }
     messages.append(new_msg)
 
-    # Broadcast the new message
     await broadcast(new_msg)
     return JSONResponse(status_code=201, content={"success": True})
-
 
 @app.post("/like")
 async def like_message(data: Reaction):
@@ -75,7 +67,6 @@ async def like_message(data: Reaction):
     await broadcast(msg)
     return JSONResponse(status_code=200, content=msg)
 
-
 @app.post("/dislike")
 async def dislike_message(data: Reaction):
     """Increment dislikes for a message."""
@@ -87,10 +78,7 @@ async def dislike_message(data: Reaction):
     await broadcast(msg)
     return JSONResponse(status_code=200, content=msg)
 
-
-# -----------------------
-# WebSocket Endpoint
-# -----------------------
+# WebSocket endpoint
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -101,15 +89,12 @@ async def websocket_endpoint(websocket: WebSocket):
 
     try:
         while True:
-            await websocket.receive_text()  # keeps connection open
+            await websocket.receive_text()  # keep connection alive
     except WebSocketDisconnect:
         active_connections.remove(websocket)
         print("WebSocket client disconnected")
 
-
-# -----------------------
 # Helper function to broadcast updates
-# -----------------------
 
 async def broadcast(message: dict):
     """Send a JSON message to all connected WebSocket clients."""
@@ -121,10 +106,9 @@ async def broadcast(message: dict):
             pass  # ignore disconnected clients
 
 
-# -----------------------
 # Entry point
-# -----------------------
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=3000, reload=True)
+    port = int(os.environ.get("PORT", 8000))  # use Coolify's dynamic port if provided
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
