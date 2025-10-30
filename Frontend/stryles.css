@@ -1,0 +1,98 @@
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f9f9fb;
+  margin: 40px;
+  color: #333;
+}
+
+h2 {
+  color: #444;
+  text-align: center;
+}
+
+#msgInput {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.msgDiv {
+  margin: 0 auto;
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  background-color: #0078d7;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+#messages {
+  margin-top: 30px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.message {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.message b {
+  color: #222;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.message button {
+  background-color: #eee;
+  color: #333;
+  font-size: 14px;
+  padding: 4px 10px;
+  margin-left: 5px;
+}
+
+.message button:hover {
+  background-color: #ddd;
+}
+
+
+#inputContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#msgInput {
+  padding: 10px;
+  width: 60%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#sendBtn {
+  padding: 10px 14px;
+  border: none;
+  background-color: #0078d7;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#sendBtn:hover {
+  background-color: #005fa3;
+}
